@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { TodoListComponent } from '../app/todo-list/todo-list.component';
-import { ITodo, TODO } from './todo.model';
+import { ITodo} from './todo.model';
 import { SearchBarComponent } from '../app/search-bar/search-bar.component';
 import { TodoFormComponent } from '../app/todo-form/todo-form.component';
 import { CommonModule } from '@angular/common';
+import { TodoService } from './services/todo.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -14,22 +15,30 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
   title = 'first-app';
-  todos: ITodo[] = TODO;
+  todos: ITodo[] = [];
   sortedTodos: ITodo[] = [];
   filterImportant: boolean = false;
   searchQuery: string = '';
   showForm: boolean = false; 
 
-  constructor() {
+  constructor(private todoService: TodoService) {
     this.sortedTodos = [...this.todos];
+    this.loadTodos();
   }
-
-  onTodoUpdated(updatedTodo: ITodo) {    
-    const index = this.todos.findIndex(todo => todo.id === updatedTodo.id);
-        if (index !== -1) {
-      this.todos[index] = updatedTodo;
+  loadTodos() {
+    this.todoService.getTodos().subscribe((todos) => {
+      this.todos = todos;
       this.applyFilters();
-    }
+    });
+  }
+  onTodoUpdated(updatedTodo: ITodo) { 
+    this.todoService.updateTodo(updatedTodo).subscribe(() => {   
+      const index = this.todos.findIndex(todo => todo.id === updatedTodo.id);
+          if (index !== -1) {
+        this.todos[index] = updatedTodo;
+        this.applyFilters();
+      }
+    });
   }
 
   sortByDeadline() {
@@ -60,11 +69,13 @@ export class AppComponent {
   }
 
   deleteItem(id: number) {
-    const index = this.todos.findIndex(todo => todo.id === id);
-    if (index !== -1) {
-      this.todos.splice(index, 1);
-      this.applyFilters();
-    }
+    this.todoService.deleteTodo(id).subscribe(() => {
+      const index = this.todos.findIndex(todo => todo.id === id);
+      if (index !== -1) {
+        this.todos.splice(index, 1);
+        this.applyFilters();
+      }
+    });
   }
 
   clearAll() {

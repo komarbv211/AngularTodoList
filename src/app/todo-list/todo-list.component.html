@@ -1,6 +1,6 @@
 <ul class="todo_list">
-    <li *ngFor="let todo of todos" [ngClass]="{'done': todo.done, 'important': todo.important, 'completed': todo.done}">
-        <input type="checkbox" [(ngModel)]="todo.done" ((click))="onCheckboxChange(todo)">
+    <li *ngFor="let todo of todos" [ngClass]="{'done': todo.completed, 'important': todo.important, 'completed': todo.completed}">
+        <input type="checkbox" [(ngModel)]="todo.completed" ((click))="onCheckboxChange(todo)">
         <span class="exclamation" *ngIf="todo.important">!</span>
         {{ todo.title }}
         <span class="deadline" *ngIf="todo.deadline">{{ todo.deadline }}</span>

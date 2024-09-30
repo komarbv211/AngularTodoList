@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ITodo } from '../todo.model';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms'; 
-
+import { TodoService } from '../services/todo.service';
 @Component({
   selector: 'app-todo-list',
   standalone: true,
@@ -16,13 +16,17 @@ export class TodoListComponent {
 
   @Output() todoUpdated = new EventEmitter<ITodo>();
   @Output() delete = new EventEmitter<number>();
+  constructor(private todoService: TodoService) {}
 
   onDelete(id: number) {
-    this.delete.emit(id);
-  }
+    this.todoService.deleteTodo(id).subscribe(() => {
+      this.delete.emit(id);
+    });  }
   
   onCheckboxChange(todo: ITodo) {
-    todo.done = !todo.done;
-    this.todoUpdated.emit(todo);
+    todo.completed = !todo.completed;
+    this.todoService.updateTodo(todo).subscribe(updatedTodo => {
+      this.todoUpdated.emit(updatedTodo);
+    });
   }
 }

@@ -27,7 +27,7 @@ export class TodoFormComponent {
       title: this.title,
       deadline: this.deadline ? new Date(this.deadline).toLocaleDateString() : undefined,
       important: this.important,
-      done: false
+      completed: false
     };
 
     this.addTodo.emit(newTodo);
