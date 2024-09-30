@@ -1,0 +1,11 @@
+<ul class="todo_list">
+    <li *ngFor="let todo of todos" [ngClass]="{'done': todo.done, 'important': todo.important, 'completed': todo.done}">
+        <input type="checkbox" [(ngModel)]="todo.done" ((click))="onCheckboxChange(todo)">
+        <span class="exclamation" *ngIf="todo.important">!</span>
+        {{ todo.title }}
+        <span class="deadline" *ngIf="todo.deadline">{{ todo.deadline }}</span>
+        <div class="delete-todo">        
+            <button class="delete-btn" (click)="onDelete(todo.id)">X</button>
+        </div>
+    </li>
+</ul>

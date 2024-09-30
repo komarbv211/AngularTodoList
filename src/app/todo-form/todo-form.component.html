@@ -1,0 +1,21 @@
+<form (ngSubmit)="onSubmit()" class="todo-form">
+    <input 
+        type="text" 
+        [(ngModel)]="title" 
+        name="title" 
+        placeholder="Назва завдання" 
+        required>
+    <input 
+        type="date" 
+        [(ngModel)]="deadline" 
+        name="deadline">
+    <label>
+        <input 
+            type="checkbox" 
+            [(ngModel)]="important" 
+            name="important">
+        Важливе
+    </label>
+    <button type="submit">Додати</button>
+    <button type="button" (click)="onCancel()">Відмінити</button>
+</form>
